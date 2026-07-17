@@ -1,0 +1,7 @@
+# clock - a monotonic millisecond clock (the std.time bridge for perf).
+#
+# Kept in its own file so main.ecko can export a function named `time` without
+# colliding with the `time` binding that `import std.time` introduces.
+import std.time
+
+export fn ms() = time.monotonic() * 1000.0

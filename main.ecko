@@ -1,0 +1,72 @@
+# perf - measure the performance of your own Ecko code.
+#
+#   import perf
+#
+#   perf.time(|| work())                 # elapsed ms for one call
+#   perf.measure("load", || load())      # times it, prints, returns the result
+#   perf.bench(|| f(), { iters: 1000 })  # { min, mean, median, max, ops_per_sec, ... }
+#
+# Pure Ecko over std.time.monotonic (via clock.ecko); no capabilities. All
+# durations are milliseconds. The zero-arg lambda you pass is what gets timed.
+
+import "./clock.ecko"
+
+fn get_or(m, k, d) {
+    v = get(m, k)
+    if v == null { d } else { v }
+}
+
+fn median_of(sorted) {
+    n = len(sorted)
+    mid = n / 2
+    if n % 2 == 1 { sorted[mid] } else { (sorted[mid - 1] + sorted[mid]) / 2.0 }
+}
+
+# time(f) -> elapsed milliseconds for one call of the zero-arg lambda f.
+export fn time(f) {
+    t0 = clock.ms()
+    f()
+    clock.ms() - t0
+}
+
+# measure(label, f) -> f's result. Prints "label: <ms> ms" as a side effect, so
+# you can drop it transparently around any call.
+export fn measure(label, f) {
+    t0 = clock.ms()
+    result = f()
+    elapsed = clock.ms() - t0
+    print("{label}: {elapsed} ms")
+    result
+}
+
+# bench(f, opts?) -> timing statistics in ms. opts: { iters (100), warmup (3) }.
+# Runs `warmup` discarded calls, then times `iters` calls individually.
+export fn bench(f, opts = empty_map()) {
+    iters = get_or(opts, "iters", 100)
+    warmup = get_or(opts, "warmup", 3)
+    mut w = 0
+    while w < warmup {
+        f()
+        w = w + 1
+    }
+    mut times = []
+    mut i = 0
+    while i < iters {
+        t0 = clock.ms()
+        f()
+        times = push(times, clock.ms() - t0)
+        i = i + 1
+    }
+    s = sort(times)
+    total = sum(times)
+    mean = total / float(iters)
+    {
+        min: s[0],
+        max: s[iters - 1],
+        mean: mean,
+        median: median_of(s),
+        total: total,
+        iters: iters,
+        ops_per_sec: if mean > 0.0 { 1000.0 / mean } else { 0.0 },
+    }
+}

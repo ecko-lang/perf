@@ -1,0 +1,10 @@
+{
+  "name": "perf",
+  "version": "0.1.0",
+  "entrypoint": "main.ecko",
+  "description": "Measure the performance of your own Ecko code: time, measure, and bench (best-of-N stats)",
+  "author": "Sean Nieuwoudt <sean@underwulf.com>",
+  "license": "MIT",
+  "capabilities": [],
+  "dependencies": {}
+}

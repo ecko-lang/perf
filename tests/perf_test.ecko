@@ -1,0 +1,43 @@
+# Tests for the perf package. Timing is non-deterministic, so these assert
+# structure and invariants, never exact durations.
+import std.test
+import "../main.ecko"
+perf = main
+
+# A small unit of measurable work (sum 0..4999 = 12497500).
+fn work() {
+    mut s = 0
+    mut i = 0
+    while i < 5000 {
+        s = s + i
+        i = i + 1
+    }
+    s
+}
+
+test.case("time returns a non-negative float", || {
+    ms = perf.time(|| work())
+    test.eq(type_of(ms), "float")
+    test.ok(ms >= 0.0, "elapsed is non-negative")
+})
+
+test.case("measure returns the function's result transparently", || {
+    r = perf.measure("work", || work())
+    test.eq(r, 12497500)
+})
+
+test.case("bench reports the expected shape and invariants", || {
+    r = perf.bench(|| work(), { iters: 20, warmup: 2 })
+    test.eq(r.iters, 20)
+    test.ok(r.min <= r.median, "min <= median")
+    test.ok(r.median <= r.max, "median <= max")
+    test.ok(r.min <= r.mean, "min <= mean")
+    test.ok(r.mean <= r.max, "mean <= max")
+    test.ok(r.ops_per_sec > 0.0, "ops_per_sec is positive")
+    test.ok(r.total >= r.max, "total is the sum of all runs")
+})
+
+test.case("bench defaults to 100 iterations", || {
+    r = perf.bench(|| 1 + 1)
+    test.eq(r.iters, 100)
+})
