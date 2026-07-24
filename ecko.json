@@ -1,5 +1,5 @@
 {
-  "name": "perf",
+  "module": "github.com/ecko-sh/perf",
   "version": "0.1.0",
   "entrypoint": "main.ecko",
   "description": "Measure the performance of your own Ecko code: time, measure, and bench (best-of-N stats)",

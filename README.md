@@ -1,13 +1,13 @@
-# perf
+# Perf - Ecko Std Lib Package
 
-Measure the performance of your own [Ecko](https://ecko.sh) code — time a call,
+Measure the performance of your own [Ecko](https://ecko.sh) code - time a call,
 wrap it with timing, or benchmark it best-of-N. Written in Ecko over
-`std.time.monotonic`; pure, no capabilities. All durations are milliseconds.
+`std.time.monotonic`. All durations are milliseconds.
 
 ## Install
 
 ```bash
-ecko add https://github.com/ecko-sh/perf
+ecko get github.com/ecko-sh/perf
 ```
 
 ## Usage
@@ -34,7 +34,7 @@ r = perf.bench(|| parse(src), { iters: 1000 })
 | `bench(f, opts?)` | Runs `f` `iters` times (after `warmup` discarded runs) and returns timing stats |
 
 `bench` options: `{ iters (default 100), warmup (default 3) }`. It returns
-`{ min, max, mean, median, total, iters, ops_per_sec }` — durations in ms,
+`{ min, max, mean, median, total, iters, ops_per_sec }` - durations in ms,
 `ops_per_sec` derived from the mean.
 
 ## Notes
@@ -55,4 +55,4 @@ Timing is non-deterministic, so the tests assert invariants (shape, ordering,
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT - see [LICENSE](LICENSE).

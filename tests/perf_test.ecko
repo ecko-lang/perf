@@ -15,19 +15,19 @@ fn work() {
     s
 }
 
-test.case("time returns a non-negative float", || {
-    ms = perf.time(|| work())
+test.case("time returns a non-negative float", fn() {
+    ms = perf.time(fn() work())
     test.eq(type_of(ms), "float")
     test.ok(ms >= 0.0, "elapsed is non-negative")
 })
 
-test.case("measure returns the function's result transparently", || {
-    r = perf.measure("work", || work())
+test.case("measure returns the function's result transparently", fn() {
+    r = perf.measure("work", fn() work())
     test.eq(r, 12497500)
 })
 
-test.case("bench reports the expected shape and invariants", || {
-    r = perf.bench(|| work(), { iters: 20, warmup: 2 })
+test.case("bench reports the expected shape and invariants", fn() {
+    r = perf.bench(fn() work(), { iters: 20, warmup: 2 })
     test.eq(r.iters, 20)
     test.ok(r.min <= r.median, "min <= median")
     test.ok(r.median <= r.max, "median <= max")
@@ -37,7 +37,7 @@ test.case("bench reports the expected shape and invariants", || {
     test.ok(r.total >= r.max, "total is the sum of all runs")
 })
 
-test.case("bench defaults to 100 iterations", || {
-    r = perf.bench(|| 1 + 1)
+test.case("bench defaults to 100 iterations", fn() {
+    r = perf.bench(fn() 1 + 1)
     test.eq(r.iters, 100)
 })

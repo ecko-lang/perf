@@ -5,14 +5,14 @@ perf = main
 fn fib(n) = if n < 2 { n } else { fib(n - 1) + fib(n - 2) }
 
 # Time a single call.
-elapsed = perf.time(|| fib(25))
+elapsed = perf.time(fn() fib(25))
 print("fib(25) took {elapsed} ms")
 
 # Benchmark it: best-of-N with warmup.
-r = perf.bench(|| fib(20), { iters: 200 })
+r = perf.bench(fn() fib(20), { iters: 200 })
 print("fib(20): min={r.min} median={r.median} mean={r.mean} ms")
 print("throughput: {r.ops_per_sec} ops/sec over {r.iters} runs")
 
 # measure() wraps a call transparently - it returns the result and prints timing.
-result = perf.measure("fib(22)", || fib(22))
+result = perf.measure("fib(22)", fn() fib(22))
 print("fib(22) = {result}")
