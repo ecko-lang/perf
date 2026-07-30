@@ -7,7 +7,7 @@ wrap it with timing, or benchmark it best-of-N. Written in Ecko over
 ## Install
 
 ```bash
-ecko get github.com/ecko-sh/perf
+ecko get github.com/ecko-lang/perf
 ```
 
 ## Usage

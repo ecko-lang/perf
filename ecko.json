@@ -1,6 +1,6 @@
 {
-  "module": "github.com/ecko-sh/perf",
-  "version": "0.9.4",
+  "module": "github.com/ecko-lang/perf",
+  "version": "0.9.5",
   "entrypoint": "main.ecko",
   "description": "Measure the performance of your own Ecko code: time, measure, and bench (best-of-N stats)",
   "author": "Sean Nieuwoudt <sean@underwulf.com>",
