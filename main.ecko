@@ -18,7 +18,7 @@ fn get_or(m, k, d) {
 
 fn median_of(sorted) {
     n = len(sorted)
-    mid = n / 2
+    mid = n // 2
     if n % 2 == 1 { sorted[mid] } else { (sorted[mid - 1] + sorted[mid]) / 2.0 }
 }
 
