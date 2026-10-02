@@ -43,6 +43,9 @@ r = perf.bench(|| parse(src), { iters: 1000 })
   (min / median / mean / max). For sub-microsecond operations the two clock
   reads bracket the call, so lean on the mean and a high `iters`.
 - The warmup runs settle caches and branch prediction before measurement.
+- Works on Ecko before and after 0.58, which changed `time.monotonic()` from
+  Float seconds to Int milliseconds: the clock checks which one it got. Before
+  0.38.1 a measurement on 0.58 came out a thousand times too large.
 
 ## Testing
 
