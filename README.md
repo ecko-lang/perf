@@ -15,14 +15,14 @@ ecko get github.com/ecko-lang/perf
 ```ecko
 import perf
 
-perf.time(|| work())                   # 12.3  (ms, one call)
+perf.time(fn() work())  # 12  (ms, one call)
 
 # measure() returns the result and prints "label: <ms> ms"
-data = perf.measure("load", || load_data())
+data = perf.measure("load", fn() load_data())
 
-r = perf.bench(|| parse(src), { iters: 1000 })
-# { min: 0.42, max: 1.10, mean: 0.51, median: 0.48,
-#   total: 510.0, iters: 1000, ops_per_sec: 1960.8 }
+r = perf.bench(fn() parse(src), { iters: 1000 })
+# { min: 0, max: 2, mean: 0.51, median: 1,
+#   total: 510, iters: 1000, ops_per_sec: 1960.78 }
 ```
 
 ## API
@@ -40,8 +40,9 @@ r = perf.bench(|| parse(src), { iters: 1000 })
 ## Notes
 
 - Each iteration is timed individually, so `bench` reports a real distribution
-  (min / median / mean / max). For sub-microsecond operations the two clock
-  reads bracket the call, so lean on the mean and a high `iters`.
+  (min / median / mean / max). The clock counts whole milliseconds, so a call
+  faster than that times as `0` or `1`; for sub-millisecond operations lean on
+  the mean and a high `iters`.
 - The warmup runs settle caches and branch prediction before measurement.
 - Works on Ecko before and after 0.58, which changed `time.monotonic()` from
   Float seconds to Int milliseconds: the clock checks which one it got. Before
