@@ -3,13 +3,12 @@
 # Kept in its own file so main.ecko can export a function named `time` without
 # colliding with the `time` binding that `import std.time` introduces.
 #
-# `time.monotonic()` returned Float seconds before Ecko 0.58 and returns Int
-# milliseconds from 0.58 on. Telling the two apart by the value's type keeps
-# perf right on both: multiplying a 0.58 reading by 1000 would make every
-# measurement a thousand times too large, with no error to say so.
+# Read in nanoseconds and returned as fractional milliseconds, so a call that
+# takes microseconds measures as what it took rather than as 0 or 1.
+# `time.monotonic_ns()` is Ecko 0.58 and later.
 import std.time
 
+## ms() -> the steady clock's reading in milliseconds, as a Float.
 export fn ms() {
-    t = time.monotonic()
-    if type_of(t) == "float" { t * 1000.0 } else { float(t) }
+    float(time.monotonic_ns()) / 1000000.0
 }

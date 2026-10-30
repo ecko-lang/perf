@@ -6,7 +6,7 @@
 #   perf.measure("load", fn() load())    # times it, prints, returns the result
 #   perf.bench(fn() f(), { iters: 1000 }) # { min, mean, median, max, ops_per_sec, ... }
 #
-# Pure Ecko over std.time.monotonic (via clock.ecko); no capabilities. All
+# Pure Ecko over std.time.monotonic_ns (via clock.ecko); no capabilities. All
 # durations are milliseconds. The zero-arg lambda you pass is what gets timed.
 
 import "./clock.ecko"

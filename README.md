@@ -21,8 +21,8 @@ perf.time(fn() work())  # 12  (ms, one call)
 data = perf.measure("load", fn() load_data())
 
 r = perf.bench(fn() parse(src), { iters: 1000 })
-# { min: 0, max: 2, mean: 0.51, median: 1,
-#   total: 510, iters: 1000, ops_per_sec: 1960.78 }
+# { min: 0.412, max: 1.873, mean: 0.51, median: 0.488,
+#   total: 510.0, iters: 1000, ops_per_sec: 1960.78 }
 ```
 
 ## API
@@ -40,13 +40,11 @@ r = perf.bench(fn() parse(src), { iters: 1000 })
 ## Notes
 
 - Each iteration is timed individually, so `bench` reports a real distribution
-  (min / median / mean / max). The clock counts whole milliseconds, so a call
-  faster than that times as `0` or `1`; for sub-millisecond operations lean on
-  the mean and a high `iters`.
+  (min / median / mean / max). Durations are fractional milliseconds read from
+  a nanosecond clock, so a call that takes microseconds measures as what it took.
 - The warmup runs settle caches and branch prediction before measurement.
-- Works on Ecko before and after 0.58, which changed `time.monotonic()` from
-  Float seconds to Int milliseconds: the clock checks which one it got. Before
-  0.38.1 a measurement on 0.58 came out a thousand times too large.
+- Needs Ecko 0.58 or later (`time.monotonic_ns()`). Before 0.39.0 the clock
+  counted whole milliseconds, so anything faster timed as `0` or `1`.
 
 ## Testing
 

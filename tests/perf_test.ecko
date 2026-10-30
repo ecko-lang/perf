@@ -21,6 +21,13 @@ test.case("time returns a non-negative float", fn() {
     test.ok(ms >= 0.0, "elapsed is non-negative")
 })
 
+test.case("a call shorter than a millisecond still measures above zero", fn() {
+    # work() takes tens of microseconds: a whole-millisecond clock reads 0.
+    ms = perf.time(fn() work())
+    test.ok(ms > 0.0, "elapsed is above zero, got {ms}")
+    test.ok(ms < 1000.0, "elapsed is in milliseconds, got {ms}")
+})
+
 test.case("measure returns the function's result transparently", fn() {
     r = perf.measure("work", fn() work())
     test.eq(r, 12497500)
